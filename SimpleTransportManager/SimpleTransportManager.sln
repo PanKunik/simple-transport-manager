@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30002.166
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STMConsoleUI", "STMConsoleUI\STMConsoleUI.csproj", "{3083E574-C75C-45D9-8BCF-374C48018CAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STMConsoleUI.Library", "STMConsoleUI.Library\STMConsoleUI.Library.csproj", "{B680C461-BAC0-44C2-AF1E-32D0F3749202}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3083E574-C75C-45D9-8BCF-374C48018CAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3083E574-C75C-45D9-8BCF-374C48018CAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3083E574-C75C-45D9-8BCF-374C48018CAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3083E574-C75C-45D9-8BCF-374C48018CAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B680C461-BAC0-44C2-AF1E-32D0F3749202}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B680C461-BAC0-44C2-AF1E-32D0F3749202}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B680C461-BAC0-44C2-AF1E-32D0F3749202}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B680C461-BAC0-44C2-AF1E-32D0F3749202}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {60091590-E76B-431A-8F41-FF42E304DFDC}
+	EndGlobalSection
+EndGlobal
