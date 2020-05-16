@@ -9,7 +9,7 @@ namespace STMConsoleUI.Library
 {
     public class Vehicle
     {
-        public static int lastFreeId { get; private set; } = 0;
+        public static int freeId { get; private set; } = 0;
         public int Id { get; set; } = 1;
         public string Name { get; set; }
         public int Capacity { get; set; }
@@ -20,69 +20,96 @@ namespace STMConsoleUI.Library
 
         public Vehicle()
         {
-            lastFreeId++;
+            Id = ++freeId;
         }
 
-        public void PrintAllAssignedDrivers()
+        public Vehicle(string name, int capacity, int volume)
         {
-            Console.WriteLine($"List of all assigned drivers to this vehicle:");
-            foreach (var driver in AssignedDrivers)
+            Id = ++freeId;
+            Name = name;
+            Capacity = capacity;
+            Volume = volume;
+        }
+
+        public void EditInfo()
+        {
+            bool result = true;
+
+            Console.WriteLine("Enter new name of the vehicle: ");
+            string input = Console.ReadLine();
+
+            if (string.IsNullOrWhiteSpace(input) == true)
             {
-                Console.WriteLine($"Id: { driver.Id } - Fullname: { driver.FirstName } { driver.LastName }");
+                Console.WriteLine("Name of vehicle cannot be null or empty.");
+                result = false;
+            }
+
+            int capacity;
+            Console.WriteLine("Capacity: ");
+
+            if(int.TryParse(Console.ReadLine(), out capacity) == false)
+            {
+                Console.WriteLine("Capacity of vehicle cannot be null or empty.");
+                result = false;
+            }
+
+            int volume;
+            Console.WriteLine("Volume: ");
+
+            if(int.TryParse(Console.ReadLine(), out volume) == false)
+            {
+                Console.WriteLine("Volume of vehicle cannot be null or empty.");
+                result = false;
+            }
+
+            if(result == true)
+            {
+                this.Name = input;
+                this.Capacity = capacity;
+                this.Volume = volume;
+
+                Console.WriteLine("Successfully updated vehicle info.");
             }
         }
 
-        public static bool UpdateVehicleInfo(Vehicle vehicle)
+        public void AssingNewDriver(Driver driver)
         {
-            Console.Write("Enter new name of vehicle: ");
-            string newName = Console.ReadLine();
-
-            Console.Write("Enter new capacity of vehicle: ");
-
-            int newCapacity;
-            if(Int32.TryParse(Console.ReadLine(), out newCapacity) == false)
+            if (CanAssignNewDriver())
             {
-                Console.WriteLine("Entered capacity is incorrect.");
-                return false;
+                this.AssignedDrivers.Add(driver);
+                Console.WriteLine("Successfully assigned driver to the vehicle.");
             }
-
-            Console.Write("Enter new volume of vehicle: ");
-
-            int newVolume;
-            if(Int32.TryParse(Console.ReadLine(), out newVolume) == false)
+            else
             {
-                Console.WriteLine("Entered volume is incorrect.");
-                return false;
+                Console.WriteLine("This vehicle has reached maximum number of assigned drivers.");
             }
-
-            vehicle.Name = newName;
-            vehicle.Capacity = newCapacity;
-            vehicle.Volume = newVolume;
-
-            return true;
-        }
-
-        public void AssignNewDriver(Driver driver)
-        {
-            if(CanAssignNewDriver() == true)
-            {
-                AssignedDrivers.Add(driver);
-            }
-
-            Console.WriteLine($"New driver successfully assigned.");
         }
 
         private bool CanAssignNewDriver()
         {
             bool result = true;
 
-            if(AssignedDrivers.Count() >= 3)
+            if(NumberOfAssignedDrivers() >= 3)
             {
-                Console.WriteLine("This vehicle has reached maximum nubmer of drivers.");
                 result = false;
             }
 
             return result;
+        }
+
+        private int NumberOfAssignedDrivers()
+        {
+            return AssignedDrivers.Count();
+        }
+
+        public void SetOff()
+        {
+
+        }
+
+        public void Arrive()
+        {
+
         }
     }
 }

@@ -1,30 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace STMConsoleUI.Library
 {
     public class Driver
     {
-        public static int lastFreeId { get; private set; } = 0;
+        public static int freeId { get; private set; } = 0;
         public int Id { get; set; } = 1;
         public string FirstName { get; set; }
         public string LastName { get; set; }
 
         public Driver()
         {
-            lastFreeId++;
+            Id = ++freeId;
         }
 
-        public static void UpdateDriverInfo(Driver driver)
+        public Driver(string firstName, string lastName)
         {
-            Console.Write("Podaj nowe imię i nazwisko kierowcy: ");
-            string fullname = Console.ReadLine();
+            Id = ++freeId;
+            FirstName = firstName;
+            LastName = lastName;
+        }
 
-            string[] data = fullname.Split(" ");
+        public void EditInfo()
+        {
+            Console.WriteLine("Enter new full name of the driver: ");
+            string input = Console.ReadLine();
 
-            driver.FirstName = data[0];
-            driver.LastName = data[1];
+            if (string.IsNullOrWhiteSpace(input) == false)
+            {
+                string[] driverNames = input.Split(" ");
+
+                this.FirstName = driverNames[0];
+                this.LastName = driverNames[1];
+
+                Console.WriteLine("Successfully edited driver.");
+            }
+            else
+            {
+                Console.WriteLine("Name of driver cannot be null or empty.");
+            }
         }
     }
 }

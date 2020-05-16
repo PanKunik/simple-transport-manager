@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using STMConsoleUI.Library;
 
@@ -10,19 +11,31 @@ namespace STMConsoleUI
         {
             Company company = new Company();
 
-            Console.WriteLine("Last id of driver {0}", Driver.lastFreeId);
+            company.AddNewDriver();
 
-            company.AddNewDriver("Patryk", "Kunicki");
+            int driverId = 0;
 
-            company.AddNewVehicle("Volvo FH40", 12000, 340);
+            List<Driver> drivers = company.ListOfHiredDrivers();
+            List<Vehicle> vehicles = company.ListOfOwnedVehicles();
 
-            if(Vehicle.UpdateVehicleInfo(company.CompanyFleet.First()) == true)
+            company.AddNewVehicle();
+
+            drivers = company.ListOfHiredDrivers();
+            vehicles = company.ListOfOwnedVehicles();
+
+            foreach (var i in drivers)
             {
-                Console.WriteLine("Changed successfully");
+                Console.WriteLine($"Name: {i.FirstName} {i.LastName}");
             }
 
-            company.PrintListOfHiredDrivers();
-            company.PrintListOfVehicles();
+            foreach (var i in vehicles)
+            {
+                Console.WriteLine($"Name: {i.Name}, capacity: {i.Capacity}, volume: {i.Volume}");
+            }
+
+            company.AssignDriverToVehicle();
+
+            vehicles = company.ListOfOwnedVehicles();
         }
     }
 }
