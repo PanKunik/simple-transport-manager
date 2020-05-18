@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="FileProcessor.cs~RF1591fa28.TMP" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\STMConsoleUI.Library\STMConsoleUI.Library.csproj" />
   </ItemGroup>
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using STMConsoleUI.Library;
 
@@ -12,6 +13,17 @@ namespace STMConsoleUI
         static void Main(string[] args)
         {
             Company company = new Company();
+
+            FileProcessor fp = new FileProcessor(@"D:\Temp\Data\", "data.csv");
+
+            //StringBuilder strBuilder = new StringBuilder();
+
+            //strBuilder.Append("Id;Name;Age;IsAlive;\r\n");
+            //strBuilder.Append("1;Patryk;23;True\r\n");
+            //strBuilder.Append("2;Adam;44;True\r\n");
+            //strBuilder.Append("3;Joseph;98;False\r\n");
+            //strBuilder.Append("4;Olaf;33;True\r\n");
+
 
             bool programLooping = true;
 
@@ -26,6 +38,8 @@ namespace STMConsoleUI
                 Console.WriteLine("[Button] to continue...");
                 Console.ReadKey();
             }
+
+            fp.SaveData(company);
         }
 
         static void DisplayMenu()
