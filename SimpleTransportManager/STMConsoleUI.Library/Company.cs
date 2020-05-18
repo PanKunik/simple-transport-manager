@@ -256,5 +256,77 @@ namespace STMConsoleUI.Library
             return driver;
         }
 
+        public List<Driver> SearchForDrivers()
+        {
+            List<Driver> drivers = new List<Driver>();
+
+            Console.WriteLine("Enter full name of driver: ");
+            string input = Console.ReadLine();
+
+            if(string.IsNullOrWhiteSpace(input) == false)
+            {
+                string[] names = input.Split(" ");
+
+                drivers = CompanyDrivers.Where(driver => driver.FirstName.ToLower() == names[0].ToLower())
+                                .Where(driver => driver.LastName.ToLower() == names[1].ToLower())
+                                .ToList();
+            }
+            else
+            {
+                Console.WriteLine("Names of driver cannot be empty.");
+            }
+
+            return drivers;
+        }
+
+        public List<Vehicle> SearchForVehicle()
+        {
+            bool result = true;
+
+            List<Vehicle> vehicles = new List<Vehicle>();
+
+            Console.WriteLine("Enter minimum capacity: ");
+
+            int capacity;
+
+            if(int.TryParse(Console.ReadLine(), out capacity) == false)
+            {
+                Console.WriteLine("Capacity must be integer number.");
+                result = false;
+            }
+
+            Console.WriteLine("Enter minimum volume: ");
+
+            int volume;
+
+            if(int.TryParse(Console.ReadLine(), out volume) == false)
+            {
+                Console.WriteLine("Volume must be integer number.");
+                result = false;
+            }
+
+            if(result == true)
+            {
+                vehicles = CompanyFleet.Where(vehicle => vehicle.Capacity > capacity)
+                                        .Where(vehicle => vehicle.Volume > volume)
+                                        .ToList();
+            }
+            else
+            {
+                Console.WriteLine("You entered bad data.");
+            }
+
+            return vehicles;
+        }
+
+        public List<Vehicle> VehiclesOnTheRoad()
+        {
+            return CompanyFleet.Where(vehicle => vehicle.IsOnTheRoad == true).ToList();
+        }
+
+        public List<Vehicle> VehiclesOrderedByNumberOfCompletedCourses()
+        {
+            return CompanyFleet.OrderBy(vehicle => vehicle.NumberOfCoursesCompleted).ToList();
+        }
     }
 }

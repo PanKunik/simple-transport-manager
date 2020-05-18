@@ -104,12 +104,27 @@ namespace STMConsoleUI.Library
 
         public void SetOff()
         {
-
+            if (this.IsOnTheRoad == false)
+            {
+                this.IsOnTheRoad = true;
+            }
+            else
+            {
+                Console.WriteLine("This vehicle already is on his way.");
+            }
         }
 
         public void Arrive()
         {
-
+            if (this.IsOnTheRoad == true)
+            {
+                this.IsOnTheRoad = false;
+                NumberOfCoursesCompleted++;
+            }
+            else
+            {
+                Console.WriteLine("This vehicle already is in company base.");
+            }
         }
     }
 }
