@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -14,16 +15,16 @@ namespace STMConsoleUI
         {
             Company company = new Company();
 
-            FileProcessor fp = new FileProcessor(@"D:\Temp\Data\", "data.csv");
+            FileProcessor fp = new FileProcessor(@"E:\Temp\Data\", "data.csv");
 
-            //StringBuilder strBuilder = new StringBuilder();
+            try
+            {
+                fp.LoadData(company);
+            }
+            catch(IOException)
+            {
 
-            //strBuilder.Append("Id;Name;Age;IsAlive;\r\n");
-            //strBuilder.Append("1;Patryk;23;True\r\n");
-            //strBuilder.Append("2;Adam;44;True\r\n");
-            //strBuilder.Append("3;Joseph;98;False\r\n");
-            //strBuilder.Append("4;Olaf;33;True\r\n");
-
+            }
 
             bool programLooping = true;
 
@@ -39,7 +40,20 @@ namespace STMConsoleUI
                 Console.ReadKey();
             }
 
-            fp.SaveData(company);
+            try
+            {
+                fp.SaveData(company);
+            }
+            catch(IOException)
+            {
+                Console.WriteLine("Something went wrong. Check you path to file: ");
+                Console.WriteLine(fp.GetFilePath());
+                Console.WriteLine("You entered wrong drive letter or this file is used by another process.");
+                Console.WriteLine("[Button] to continue...");
+                Console.ReadKey();
+
+                // TODO: Give a user oportunity, to change path?
+            }
         }
 
         static void DisplayMenu()
