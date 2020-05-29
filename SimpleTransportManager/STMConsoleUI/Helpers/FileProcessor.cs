@@ -1,4 +1,4 @@
-﻿using STMConsoleUI.Library;
+﻿using STMConsoleUI.Library.BusinessLogic;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,7 +6,7 @@ using System.Linq;
 using System.Reflection.Metadata;
 using System.Text;
 
-namespace STMConsoleUI
+namespace STMConsoleUI.Helpers
 {
     public class FileProcessor
     {
@@ -45,7 +45,7 @@ namespace STMConsoleUI
             {
                 _fileName = value;
 
-                if(_fileName.EndsWith(".csv") == false)
+                if (_fileName.EndsWith(".csv") == false)
                 {
                     _fileName += ".csv";
                 }
@@ -143,7 +143,7 @@ namespace STMConsoleUI
         {
             try
             {
-                this.InitializeWriter();
+                InitializeWriter();
                 SaveDrivers(company.CompanyDrivers);
                 SaveVehicles(company.CompanyFleet);
             }
@@ -166,7 +166,7 @@ namespace STMConsoleUI
             {
                 _fileReader = new StreamReader(GetFilePath());
             }
-            catch(IOException)
+            catch (IOException)
             {
                 throw;
             }
@@ -182,18 +182,18 @@ namespace STMConsoleUI
                 {
                     string line = _fileReader.ReadLine();
 
-                    if(line.Contains("Id;FirstName;LastName;") == true)
+                    if (line.Contains("Id;FirstName;LastName;") == true)
                     {
                         continue;
                     }
 
-                    if(line.Contains("Id;Name;Capacity;Volume;") == true)
+                    if (line.Contains("Id;Name;Capacity;Volume;") == true)
                     {
                         readingVehicles = true;
                         continue;
                     }
 
-                    if(readingVehicles == false)
+                    if (readingVehicles == false)
                     {
                         Driver driver = DeserializeDriver(line);
 
@@ -209,30 +209,30 @@ namespace STMConsoleUI
                     else
                     {
                         int[] ids;
-                        Vehicle vehicle = DeserializeVehicle(line, out ids);
+                        Vehicle VehicleFromFile = DeserializeVehicle(line, out ids);
 
-                        if (vehicle == null)
+                        if (VehicleFromFile == null)
                         {
                             continue;
                         }
                         else
                         {
-                            company.CompanyFleet.Add(vehicle);
+                            company.CompanyFleet.Add(VehicleFromFile);
                             foreach (var id in ids)
                             {
-                                company.CompanyFleet.Where(vehicle => vehicle.Id == vehicle.Id).FirstOrDefault().AssignedDrivers.Add(company.CompanyDrivers.Where(driver => driver.Id == id).FirstOrDefault());
+                                company.CompanyFleet.Where(vehicle => vehicle.Id == VehicleFromFile.Id).FirstOrDefault().AssignedDrivers.Add(company.CompanyDrivers.Where(driver => driver.Id == id).FirstOrDefault());
                             }
                         }
                     }
                 }
             }
-            catch(IOException)
+            catch (IOException)
             {
                 throw;
             }
             finally
             {
-                if(_fileReader != null)
+                if (_fileReader != null)
                 {
                     _fileReader.Close();
                 }
@@ -247,7 +247,7 @@ namespace STMConsoleUI
 
             int driverId;
 
-            if(int.TryParse(data[0], out driverId) == true)
+            if (int.TryParse(data[0], out driverId) == true)
             {
                 driver.Id = driverId;
                 driver.FirstName = data[1];
@@ -276,17 +276,17 @@ namespace STMConsoleUI
 
             bool isOnTheRoad;
 
-            if(int.TryParse(data[0], out vehicleId) == false)
+            if (int.TryParse(data[0], out vehicleId) == false)
             {
                 successfullyParsed = false;
             }
 
-            if(int.TryParse(data[2], out vehicleCapacity) == false)
+            if (int.TryParse(data[2], out vehicleCapacity) == false)
             {
                 successfullyParsed = false;
             }
 
-            if(int.TryParse(data[3], out vehicleVolume) == false)
+            if (int.TryParse(data[3], out vehicleVolume) == false)
             {
                 successfullyParsed = false;
             }
@@ -314,11 +314,11 @@ namespace STMConsoleUI
 
                 ids = new int[drivers.Length - 1];
 
-                for(int i = 0; i < drivers.Length - 1; i++)
+                for (int i = 0; i < drivers.Length - 1; i++)
                 {
                     int id;
 
-                    if(int.TryParse(drivers[i], out id) == true)
+                    if (int.TryParse(drivers[i], out id) == true)
                     {
                         ids[i] = id;
                     }
@@ -337,7 +337,7 @@ namespace STMConsoleUI
         {
             try
             {
-                this.InitializeReader();
+                InitializeReader();
                 LoadFromFile(company);
             }
             catch (IOException)
