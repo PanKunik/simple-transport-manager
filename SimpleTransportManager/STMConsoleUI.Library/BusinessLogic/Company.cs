@@ -77,14 +77,7 @@ namespace STMConsoleUI.Library.BusinessLogic
 
         private bool CanHireNewDriver()
         {
-            bool result = false;
-
-            if (NumberOfHiredDrivers() < 50)
-            {
-                result = true;
-            }
-
-            return result;
+            return NumberOfHiredDrivers() < 50;
         }
 
         public ICollection<ValidationResult> AddNewVehicle(Vehicle vehicle)
@@ -111,14 +104,7 @@ namespace STMConsoleUI.Library.BusinessLogic
 
         private bool CanOwnNewVehicle()
         {
-            bool result = false;
-
-            if (NumberOfOwnedVehicles() < 100)
-            {
-                result = true;
-            }
-
-            return result;
+            return NumberOfOwnedVehicles() < 100;
         }
 
         public ICollection<ValidationResult> UpdateDriverInfo(Driver updatedDriver)
@@ -266,26 +252,12 @@ namespace STMConsoleUI.Library.BusinessLogic
 
         public bool DoesDriverExist(int id)
         {
-            bool exist = false;
-
-            if(CompanyDrivers.Where(driver => driver.Id == id).Count() > 0)
-            {
-                exist = true;
-            }
-
-            return exist;
+            return CompanyDrivers.Where(driver => driver.Id == id).Count() > 0;
         }
 
         public bool DoesVehicleExist(int id)
         {
-            bool exist = false;
-
-            if(CompanyFleet.Where(vehicle => vehicle.Id == id).Count() > 0)
-            {
-                exist = true;
-            }
-
-            return exist;
+            return CompanyFleet.Where(vehicle => vehicle.Id == id).Count() > 0;
         }
 
         private Vehicle GetVehicleById(int id)
@@ -293,7 +265,7 @@ namespace STMConsoleUI.Library.BusinessLogic
             return CompanyFleet.Where(vehicle => vehicle.Id == id).FirstOrDefault();
         }
 
-        private Driver GetDriverById(int id)
+        public Driver GetDriverById(int id)
         {
             return CompanyDrivers.Where(driver => driver.Id == id).FirstOrDefault();
         }

@@ -1,82 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Text;
 
-namespace STMConsoleUI.Helpers
+namespace STMConsoleUI.Helpers.Messages
 {
-    public class StandardMessage
+    public static class StandardMessage
     {
-        public void ValidationSummary(ICollection<ValidationResult> validationResults)
+        public static void ValidationSummary(ICollection<ValidationResult> validationResults)
         {
-            foreach(var validationResult in validationResults)
+            foreach (var validationResult in validationResults)
             {
                 Console.WriteLine(validationResult);
             }
         }
 
-        public void WaitForButton()
+        public static void WaitForButton()
         {
             Console.WriteLine("Press [Enter] key to continue...");
             Console.ReadLine();
         }
 
-        public void Goodbye()
+        public static void Goodbye()
         {
             Console.WriteLine("\nYou are exiting the program. Goodbye!");
         }
 
-        public void NoDriverFound()
+        public static void NoDriverFound()
         {
             Console.WriteLine("\nNo driver found.");
         }
 
-        public void NoDriversHired()
+        public static void NoDriversHired()
         {
             Console.WriteLine("\nThe company hasn't hired any drivers yet.");
         }
 
-        public void NoDriversAssigned()
+        public static void NoDriversAssigned()
         {
             Console.WriteLine("No drivers assigned yet to this vehicle.\n");
         }
 
-        public void NoVehicleFound()
+        public static void NoVehicleFound()
         {
             Console.WriteLine("\nNo vehicle found.");
         }
 
-        public void NoVehiclesOwned()
+        public static void NoVehiclesOwned()
         {
             Console.WriteLine("\nThe company hasn't owned any vehicles yet.");
         }
 
-        public void MaximumNumberOfDriversReached()
+        public static void MaximumNumberOfDriversReached()
         {
             Console.WriteLine("\nThis vehicle has reached maximum number of drivers assigned.");
         }
 
-        public void MaxNumberOfHiredDrivers()
+        public static void MaxNumberOfHiredDrivers()
         {
             Console.WriteLine("\nThe company has reached her limit of hired drivers.");
         }
 
-        public void MaxNumberOfOwnedVehicles()
+        public static void MaxNumberOfOwnedVehicles()
         {
             Console.WriteLine("\nThe company has reached her limit of owned vehicles.");
         }
 
-        public void NoFileFound()
+        public static void NoFileFound()
         {
             Console.WriteLine("\nCould not find file. Check your path to file.");
         }
 
-        public void NoOptionFound()
+        public static void NoOptionFound()
         {
             Console.WriteLine("There is no option with given number.");
         }
 
-        public void Menu()
+        public static void Menu()
         {
             Console.Clear();
 

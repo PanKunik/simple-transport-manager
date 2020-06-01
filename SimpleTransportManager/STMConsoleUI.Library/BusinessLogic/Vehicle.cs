@@ -66,14 +66,7 @@ namespace STMConsoleUI.Library.BusinessLogic
 
         private bool CanAssignNewDriver()
         {
-            bool result = true;
-
-            if (NumberOfAssignedDrivers() >= 3)
-            {
-                result = false;
-            }
-
-            return result;
+            return NumberOfAssignedDrivers() < 3;
         }
 
         public int NumberOfAssignedDrivers()

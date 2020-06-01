@@ -1,49 +1,55 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using STMConsoleUI.Helpers;
-using STMConsoleUI.Library.BusinessLogic;
+using STMConsoleUI.Controllers;
+using STMConsoleUI.Helpers.FileProcessing;
+using STMConsoleUI.Helpers.Input;
+using STMConsoleUI.Helpers.Messages;
 
 namespace STMConsoleUI
 {
     class Program
     {
+        static MainController Controller = new MainController();
+        static FileProcessor FileProcessor = new FileProcessor(ref Controller.Company, @"E:\Temp\Data\", "data.csv");
+
         static void Main(string[] args)
         {
-            StandardMessage Message = new StandardMessage();
-            ProgramController Program = new ProgramController();
+            LoadDataFromFile();
+            MainLoop();
+            SaveDataToFile();
+        }
 
-            FileProcessor FileProcessor = new FileProcessor(@"E:\Temp\Data\", "data.csv");
-
+        static void LoadDataFromFile()
+        {
             try
             {
-                FileProcessor.LoadData(Program.Company);
+                FileProcessor.LoadData();
             }
-            catch(IOException)
+            catch (IOException)
             {
-                Message.NoFileFound();
+                StandardMessage.NoFileFound();
             }
+        }
 
-            Input Input = new Input();
+        static void MainLoop()
+        {
+            bool programIsLooped;
 
-            bool mainLoop = true;
-
-            while(mainLoop == true)
+            do
             {
-                Message.Menu();
+                StandardMessage.Menu();
 
-                int option = Input.CatchUserOption();
-                mainLoop = Program.InvokeAction(option);
+                int option = InputUser.CatchUserOption();
+                programIsLooped = Controller.InvokeAction(option);
             }
+            while (programIsLooped);
+        }
 
+        static void SaveDataToFile()
+        {
             try
             {
-                FileProcessor.SaveData(Program.Company);
+                FileProcessor.SaveData();
             }
             catch (IOException)
             {
