@@ -156,55 +156,7 @@ namespace STMConsoleUI.Helpers.FileProcessing
         {
             try
             {
-                bool readingVehicles = false;
-
-                while (_fileReader.EndOfStream == false)
-                {
-                    string line = _fileReader.ReadLine();
-
-                    if (line.Contains("Id;FirstName;LastName;"))
-                    {
-                        continue;
-                    }
-
-                    if (line.Contains("Id;Name;Capacity;Volume;"))
-                    {
-                        readingVehicles = true;
-                        continue;
-                    }
-
-                    if (readingVehicles)
-                    {
-                        Vehicle Vehicle = VehicleFileOperator.DeserializeVehicle(line);
-
-                        if (Vehicle == null)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            Company.CompanyFleet.Add(Vehicle);
-
-                            foreach(var driversId in DriverFileOperator.DeserializeDriversIds(line.Split(";")[6]))
-                            {
-                                Company.AssignDriverToVehicle(driversId, Vehicle.Id);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Driver Driver = DriverFileOperator.DeserializeDriver(line);
-
-                        if (Driver == null)
-                        {
-                            continue;
-                        }
-                        else
-                        {
-                            Company.CompanyDrivers.Add(Driver);
-                        }
-                    }
-                }
+                ReadFileInLoop();
             }
             catch (IOException)
             {
@@ -215,6 +167,69 @@ namespace STMConsoleUI.Helpers.FileProcessing
                 if (_fileReader != null)
                 {
                     _fileReader.Close();
+                }
+            }
+        }
+
+        private void ReadFileInLoop()
+        {
+            bool readingVehicles = false;
+
+            while (_fileReader.EndOfStream == false)
+            {
+                string line = _fileReader.ReadLine();
+
+                if (line.Contains("Id;FirstName;LastName;"))
+                {
+                    continue;
+                }
+
+                if (line.Contains("Id;Name;Capacity;Volume;"))
+                {
+                    readingVehicles = true;
+                    continue;
+                }
+
+                if (readingVehicles)
+                {
+                    ReadOneVehicle(line);
+                }
+                else
+                {
+                    ReadOneDriver(line);
+                }
+            }
+        }
+
+        private void ReadOneDriver(string line)
+        {
+            Driver Driver = DriverFileOperator.DeserializeDriver(line);
+
+            if (Driver == null)
+            {
+                return;
+            }
+            else
+            {
+                Company.CompanyDrivers.Add(Driver);
+            }
+        }
+
+        private void ReadOneVehicle(string line)
+        {
+            Vehicle Vehicle = VehicleFileOperator.DeserializeVehicle(line);
+
+            if (Vehicle == null)
+            {
+                return;
+            }
+            else
+            {
+                Company.CompanyFleet.Add(Vehicle);
+
+                foreach (var driversId in DriverFileOperator.DeserializeDriversIds(line.Split(";")[6]))
+                {
+                    Company.AssignDriverToVehicle(driversId, Vehicle.Id);
                 }
             }
         }

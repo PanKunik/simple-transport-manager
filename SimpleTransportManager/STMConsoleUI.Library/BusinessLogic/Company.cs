@@ -8,50 +8,12 @@ namespace STMConsoleUI.Library.BusinessLogic
 {
     public class Company
     {
+        private const int MaxNumberOfDrivers = 50;
+        private const int MaxNumberOfVehicles = 100;
+        private const int MinIdNumber = 1;
+
         public List<Vehicle> CompanyFleet { get; set; } = new List<Vehicle>();  // max 100
         public List<Driver> CompanyDrivers { get; set; } = new List<Driver>();  // max 50
-
-        public int NumberOfHiredDrivers()
-        {
-            return CompanyDrivers.Count();
-        }
-
-        public int NumberOfOwnedVehicles()
-        {
-            return CompanyFleet.Count();
-        }
-
-        public List<Driver> ListOfHiredDrivers()
-        {
-            List<Driver> drivers;
-
-            if (NumberOfHiredDrivers() <= 0)
-            {
-                drivers = null;
-            }
-            else
-            {
-                drivers = CompanyDrivers.OrderBy(driver => driver.Id).ToList();
-            }
-
-            return drivers;
-        }
-
-        public List<Vehicle> ListOfOwnedVehicles()
-        {
-            List<Vehicle> vehicles;
-
-            if (NumberOfOwnedVehicles() <= 0)
-            {
-                vehicles = null;
-            }
-            else
-            {
-                vehicles = CompanyFleet.OrderBy(vehicle => vehicle.Id).ToList();
-            }
-
-            return vehicles;
-        }
 
         public ICollection<ValidationResult> AddNewDriver(Driver driver)
         {
@@ -77,7 +39,28 @@ namespace STMConsoleUI.Library.BusinessLogic
 
         private bool CanHireNewDriver()
         {
-            return NumberOfHiredDrivers() < 50;
+            return NumberOfHiredDrivers() < MaxNumberOfDrivers;
+        }
+
+        public int NumberOfHiredDrivers()
+        {
+            return CompanyDrivers.Count();
+        }
+
+        public List<Driver> ListOfHiredDrivers()
+        {
+            List<Driver> drivers;
+
+            if (NumberOfHiredDrivers() <= 0)
+            {
+                drivers = null;
+            }
+            else
+            {
+                drivers = CompanyDrivers.OrderBy(driver => driver.Id).ToList();
+            }
+
+            return drivers;
         }
 
         public ICollection<ValidationResult> AddNewVehicle(Vehicle vehicle)
@@ -104,32 +87,33 @@ namespace STMConsoleUI.Library.BusinessLogic
 
         private bool CanOwnNewVehicle()
         {
-            return NumberOfOwnedVehicles() < 100;
+            return NumberOfOwnedVehicles() < MaxNumberOfVehicles;
         }
 
-        public ICollection<ValidationResult> UpdateDriverInfo(Driver updatedDriver)
+        public int NumberOfOwnedVehicles()
         {
-            ValidationContext context = new ValidationContext(updatedDriver);
-            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+            return CompanyFleet.Count();
+        }
 
-            if (Validator.TryValidateObject(updatedDriver, context, validationResults, true) == true)
+        public List<Vehicle> ListOfOwnedVehicles()
+        {
+            List<Vehicle> vehicles;
+
+            if (NumberOfOwnedVehicles() <= 0)
             {
-                Driver driver = GetDriverById(updatedDriver.Id);
-
-                if (driver != null)
-                {
-                    driver.FirstName = updatedDriver.FirstName;
-                    driver.LastName = updatedDriver.LastName;
-
-                    validationResults.Add(new ValidationResult("Sucessfully updated driver's informations."));
-                }
-                else
-                {
-                    validationResults.Add(new ValidationResult("No driver found with given Id."));
-                }
+                vehicles = null;
+            }
+            else
+            {
+                vehicles = CompanyFleet.OrderBy(vehicle => vehicle.Id).ToList();
             }
 
-            return validationResults;
+            return vehicles;
+        }
+
+        private Vehicle GetVehicleById(int id)
+        {
+            return CompanyFleet.Where(vehicle => vehicle.Id == id).FirstOrDefault();
         }
 
         public ICollection<ValidationResult> UpdateVehicleInfo(Vehicle updatedVehicle)
@@ -158,53 +142,11 @@ namespace STMConsoleUI.Library.BusinessLogic
             return validationResults;
         }
 
-        public ICollection<ValidationResult> AssignDriverToVehicle(int driverId, int vehicleId)
-        {
-            bool validatedSuccessfully = true;
-
-            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
-
-            if (driverId < 1)
-            {
-                validatedSuccessfully = false;
-                validationResults.Add(new ValidationResult("Driver's Id must be integer number greater than 1."));
-            }
-
-            if (vehicleId < 1)
-            {
-                validatedSuccessfully = false;
-                validationResults.Add(new ValidationResult("Vehicle's Id must be integer number greater than 1."));
-            }
-
-            Driver driver = GetDriverById(driverId);
-
-            if(driver == null && validatedSuccessfully)
-            {
-                validatedSuccessfully = false;
-                validationResults.Add(new ValidationResult("There is no driver with given Id."));
-            }
-
-            Vehicle vehicle = GetVehicleById(vehicleId);
-
-            if (vehicle == null && validatedSuccessfully)
-            {
-                validatedSuccessfully = false;
-                validationResults.Add(new ValidationResult("There is no vehicle with given Id."));
-            }
-
-            if (validatedSuccessfully)
-            {
-                validationResults = vehicle.AssingNewDriver(driver);
-            }
-
-            return validationResults;
-        }
-
         public ICollection<ValidationResult> VehicleSetOff(int id)
         {
             ICollection<ValidationResult> validationResults = new List<ValidationResult>();
 
-            if (id < 1)
+            if (id < MinIdNumber)
             {
                 validationResults.Add(new ValidationResult("Vehicle's Id must be integer number greater than 1."));
             }
@@ -229,7 +171,7 @@ namespace STMConsoleUI.Library.BusinessLogic
         {
             ICollection<ValidationResult> validationResults = new List<ValidationResult>();
 
-            if (id < 1)
+            if (id < MinIdNumber)
             {
                 validationResults.Add(new ValidationResult("Vehicle's Id must be integer number greater than 1."));
             }
@@ -250,6 +192,78 @@ namespace STMConsoleUI.Library.BusinessLogic
             return validationResults;
         }
 
+        public Driver GetDriverById(int id)
+        {
+            return CompanyDrivers.Where(driver => driver.Id == id).FirstOrDefault();
+        }
+
+        public ICollection<ValidationResult> AssignDriverToVehicle(int driverId, int vehicleId)
+        {
+            bool validatedSuccessfully = true;
+
+            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+
+            if (driverId < MinIdNumber)
+            {
+                validatedSuccessfully = false;
+                validationResults.Add(new ValidationResult("Driver's Id must be integer number greater than 1."));
+            }
+
+            if (vehicleId < MinIdNumber)
+            {
+                validatedSuccessfully = false;
+                validationResults.Add(new ValidationResult("Vehicle's Id must be integer number greater than 1."));
+            }
+
+            Driver driver = GetDriverById(driverId);
+
+            if (driver == null && validatedSuccessfully)
+            {
+                validatedSuccessfully = false;
+                validationResults.Add(new ValidationResult("There is no driver with given Id."));
+            }
+
+            Vehicle vehicle = GetVehicleById(vehicleId);
+
+            if (vehicle == null && validatedSuccessfully)
+            {
+                validatedSuccessfully = false;
+                validationResults.Add(new ValidationResult("There is no vehicle with given Id."));
+            }
+
+            if (validatedSuccessfully)
+            {
+                validationResults = vehicle.AssingNewDriver(driver);
+            }
+
+            return validationResults;
+        }
+
+        public ICollection<ValidationResult> UpdateDriverInfo(Driver updatedDriver)
+        {
+            ValidationContext context = new ValidationContext(updatedDriver);
+            ICollection<ValidationResult> validationResults = new List<ValidationResult>();
+
+            if (Validator.TryValidateObject(updatedDriver, context, validationResults, true) == true)
+            {
+                Driver driver = GetDriverById(updatedDriver.Id);
+
+                if (driver != null)
+                {
+                    driver.FirstName = updatedDriver.FirstName;
+                    driver.LastName = updatedDriver.LastName;
+
+                    validationResults.Add(new ValidationResult("Sucessfully updated driver's informations."));
+                }
+                else
+                {
+                    validationResults.Add(new ValidationResult("No driver found with given Id."));
+                }
+            }
+
+            return validationResults;
+        }
+
         public bool DoesDriverExist(int id)
         {
             return CompanyDrivers.Where(driver => driver.Id == id).Count() > 0;
@@ -258,16 +272,6 @@ namespace STMConsoleUI.Library.BusinessLogic
         public bool DoesVehicleExist(int id)
         {
             return CompanyFleet.Where(vehicle => vehicle.Id == id).Count() > 0;
-        }
-
-        private Vehicle GetVehicleById(int id)
-        {
-            return CompanyFleet.Where(vehicle => vehicle.Id == id).FirstOrDefault();
-        }
-
-        public Driver GetDriverById(int id)
-        {
-            return CompanyDrivers.Where(driver => driver.Id == id).FirstOrDefault();
         }
 
         public List<Driver> SearchForDrivers(string firstName, string lastName)

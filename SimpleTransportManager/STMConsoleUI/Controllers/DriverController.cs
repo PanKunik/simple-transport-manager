@@ -16,18 +16,29 @@ namespace STMConsoleUI.Controllers
             this.Company = Company;
         }
 
+        public void AssignDriverToVehicle()
+        {
+            int driverId, vehicleId;
+
+            driverId = InputDriver.CatchDriverId();
+            vehicleId = InputVehicle.CatchVehicleId();
+
+            StandardMessage.ValidationSummary(Company.AssignDriverToVehicle(driverId, vehicleId));
+        }
+
         public void NumberOfHiredDrivers()
         {
             Console.WriteLine($"Number of hired drivers in the company: { Company.NumberOfHiredDrivers() }");
         }
 
-        public void HiredDrivers()
+        public void SearchForDrivers()
         {
-            List<Driver> drivers = Company.ListOfHiredDrivers();
-
-            if (drivers != null)
+            if (Company.NumberOfHiredDrivers() > 0)
             {
-                PrintDrivers(drivers);
+                string firstName = InputDriver.CatchDriverFirstName();
+                string lastName = InputDriver.CatchDriverLastName();
+
+                TryFindDrivers(Company.SearchForDrivers(firstName, lastName);
             }
             else
             {
@@ -35,16 +46,27 @@ namespace STMConsoleUI.Controllers
             }
         }
 
-        public void TryPrintAssignedDrivers(IEnumerable<Driver> drivers)
+        private void TryFindDrivers(List<Driver> drivers)
         {
-            if (drivers.Count() > 0)
+            if (drivers.Count > 0)
             {
-                Console.WriteLine("Assigned drivers:");
                 PrintDrivers(drivers);
             }
             else
             {
-                StandardMessage.NoDriversAssigned();
+                StandardMessage.NoDriverFound();
+            }
+        }
+
+        private void TryPrintDrivers(List<Driver> drivers)
+        {
+            if(Company.NumberOfHiredDrivers() > 0)
+            {
+                PrintDrivers(drivers);
+            }
+            else
+            {
+                StandardMessage.NoDriversHired();
             }
         }
 
@@ -65,12 +87,17 @@ namespace STMConsoleUI.Controllers
             Console.WriteLine($"{Driver.Id,-10}{Driver.FirstName,-31}{Driver.LastName}");
         }
 
-        public void HireDriver()
+        public void TryPrintAssignedDrivers(IEnumerable<Driver> drivers)
         {
-            Driver Driver = new Driver();
-            CatchDriverData(Driver);
-
-            StandardMessage.ValidationSummary(Company.AddNewDriver(Driver));
+            if (drivers.Count() > 0)
+            {
+                Console.WriteLine("Assigned drivers:");
+                PrintDrivers(drivers);
+            }
+            else
+            {
+                StandardMessage.NoDriversAssigned();
+            }
         }
 
         public void EditDriverInformations()
@@ -97,6 +124,10 @@ namespace STMConsoleUI.Controllers
                 StandardMessage.NoDriversHired();
             }
         }
+        public void HiredDrivers()
+        {
+            TryPrintDrivers(Company.ListOfHiredDrivers());
+        }
 
         private void CatchDriverData(Driver Driver)
         {
@@ -104,38 +135,12 @@ namespace STMConsoleUI.Controllers
             Driver.LastName = InputDriver.CatchDriverLastName();
         }
 
-        public void AssignDriverToVehicle()
+        public void HireDriver()
         {
-            int driverId, vehicleId;
+            Driver Driver = new Driver();
+            CatchDriverData(Driver);
 
-            driverId = InputDriver.CatchDriverId();
-            vehicleId = InputVehicle.CatchVehicleId();
-
-            StandardMessage.ValidationSummary(Company.AssignDriverToVehicle(driverId, vehicleId));
-        }
-
-        public void SearchForDrivers()
-        {
-            if (Company.NumberOfHiredDrivers() > 0)
-            {
-                string firstName = InputDriver.CatchDriverFirstName();
-                string lastName = InputDriver.CatchDriverLastName();
-
-                List<Driver> drivers = Company.SearchForDrivers(firstName, lastName);
-
-                if (drivers.Count > 0)
-                {
-                    PrintDrivers(drivers);
-                }
-                else
-                {
-                    StandardMessage.NoDriverFound();
-                }
-            }
-            else
-            {
-                StandardMessage.NoDriversHired();
-            }
+            StandardMessage.ValidationSummary(Company.AddNewDriver(Driver));
         }
     }
 }
