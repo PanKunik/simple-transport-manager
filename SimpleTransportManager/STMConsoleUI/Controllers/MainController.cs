@@ -16,6 +16,7 @@ namespace STMConsoleUI.Controllers
             DriverController = new DriverController(Company);
             VehicleController = new VehicleController(Company);
         }
+
         public bool InvokeAction(int option)
         {
             bool result = true;

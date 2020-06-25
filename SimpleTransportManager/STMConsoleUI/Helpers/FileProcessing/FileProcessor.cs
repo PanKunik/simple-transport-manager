@@ -12,6 +12,8 @@ namespace STMConsoleUI.Helpers.FileProcessing
         readonly DriverFileOperator DriverFileOperator;
         readonly VehicleFileOperator VehicleFileOperator;
 
+        bool DefaultPath = false;
+
         StreamWriter _fileWriter = null;
         StreamReader _fileReader = null;
 
@@ -54,15 +56,66 @@ namespace STMConsoleUI.Helpers.FileProcessing
             }
         }
 
-        public FileProcessor(ref Company Company, string filePath, string fileName)
+        public FileProcessor(ref Company Company)
         {
             this.Company = Company;
 
             DriverFileOperator = new DriverFileOperator();
             VehicleFileOperator = new VehicleFileOperator();
+        }
 
-            FileRootPath = filePath;
-            FileName = fileName;
+        public bool HasDefaultPath()
+        {
+            return DefaultPath;
+        }
+
+        public void TrySetPath(string filePath)
+        {
+            try
+            {
+                if (filePath.Length > 0)
+                {
+                    SetPath(filePath);
+                }
+                else
+                {
+                    SetDefaultPath();
+                    DefaultPath = true;
+                }
+            }
+            catch(System.IndexOutOfRangeException)
+            {
+                SetDefaultPath();
+                throw;
+            }
+        }
+
+        private void SetPath(string filePath)
+        {
+            bool readingFileName = true;
+            int i = filePath.Length - 1;
+
+            while (readingFileName)
+            {
+                if (filePath[i] != '\\')
+                {
+                    i--;
+                }
+                else
+                {
+                    i++;
+                    readingFileName = false;
+                }
+            }
+
+            _fileRootPath = filePath.Remove(i);
+            _fileName = filePath.Substring(--i);
+        }
+
+        private void SetDefaultPath()
+        {
+            _fileRootPath = @"..\..\..\Temp\Data\";
+            _fileName = "data.csv";
         }
 
         public string GetFilePath()
@@ -105,12 +158,21 @@ namespace STMConsoleUI.Helpers.FileProcessing
                 }
                 else
                 {
+                    CreateDesiredDirectories();
                     _fileWriter = new StreamWriter(File.Create(GetFilePath()));
                 }
             }
             catch (IOException)
             {
                 throw;
+            }
+        }
+
+        private void CreateDesiredDirectories()
+        {
+            if (!Directory.Exists(_fileRootPath))
+            {
+                Directory.CreateDirectory(_fileRootPath);
             }
         }
 

@@ -10,13 +10,26 @@ namespace STMConsoleUI
     class Program
     {
         static MainController Controller = new MainController();
-        static FileProcessor FileProcessor = new FileProcessor(ref Controller.Company, @"E:\Temp\Data\", "data.csv");
+        static FileProcessor FileProcessor = new FileProcessor(ref Controller.Company);
 
         static void Main(string[] args)
         {
+            GetPathToFile();
             LoadDataFromFile();
             MainLoop();
             SaveDataToFile();
+        }
+
+        static void GetPathToFile()
+        {
+            try
+            {
+                FileProcessor.TrySetPath(InputUser.CatchUserPathToFile());
+            }
+            catch (IndexOutOfRangeException)
+            {
+                StandardMessage.NoFileFound();
+            }
         }
 
         static void LoadDataFromFile()
@@ -27,7 +40,10 @@ namespace STMConsoleUI
             }
             catch (IOException)
             {
-                StandardMessage.NoFileFound();
+                if (!FileProcessor.HasDefaultPath())
+                {
+                    StandardMessage.NoFileFound();
+                }
             }
         }
 

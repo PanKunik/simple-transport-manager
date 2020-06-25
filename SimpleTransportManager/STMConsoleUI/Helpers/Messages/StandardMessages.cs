@@ -67,7 +67,8 @@ namespace STMConsoleUI.Helpers.Messages
 
         public static void NoFileFound()
         {
-            Console.WriteLine("\nCould not find file. Check your path to file.");
+            Console.WriteLine("\nCould not find file. Your data would be save to default location (..\\Temp\\Data.data.csv).");
+            WaitForButton();
         }
 
         public static void NoOptionFound()

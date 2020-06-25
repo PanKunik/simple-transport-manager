@@ -12,7 +12,7 @@ namespace STMConsoleUI.Helpers.Input
 
         public static string CatchString(string message)
         {
-            Console.WriteLine(message);
+            Console.Write(message);
             return Console.ReadLine();
         }
 

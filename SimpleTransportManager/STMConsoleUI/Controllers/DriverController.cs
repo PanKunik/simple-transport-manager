@@ -38,7 +38,7 @@ namespace STMConsoleUI.Controllers
                 string firstName = InputDriver.CatchDriverFirstName();
                 string lastName = InputDriver.CatchDriverLastName();
 
-                TryFindDrivers(Company.SearchForDrivers(firstName, lastName);
+                TryFindDrivers(Company.SearchForDrivers(firstName, lastName));
             }
             else
             {
