@@ -1,0 +1,36 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v3.1",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v3.1": {
+      "STMConsoleUI/1.0.0": {
+        "dependencies": {
+          "STMConsoleUI.Library": "1.0.0"
+        },
+        "runtime": {
+          "STMConsoleUI.dll": {}
+        }
+      },
+      "STMConsoleUI.Library/1.0.0": {
+        "runtime": {
+          "STMConsoleUI.Library.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "STMConsoleUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "STMConsoleUI.Library/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
